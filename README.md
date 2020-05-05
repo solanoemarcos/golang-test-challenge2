@@ -18,3 +18,9 @@ go test ..\test -coverpkg ./...
 ```
 The coverage is 92.6% of statements, only left untested the return from the errors:
 ![Uncovered](./assets/Coverage.PNG)
+
+Build/run:
+```
+go build
+go run .
+```

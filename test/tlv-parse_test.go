@@ -3,7 +3,7 @@ package test
 import (
 	"testing"
 
-	"github.com/solanoemarcos/fallabella-fif-test-2/parser"
+	"github.com/solanoemarcos/golang-test-challenge2/parser"
 )
 
 func TestTlvParseEmptyArray(t *testing.T) {
@@ -25,9 +25,9 @@ func TestTlvParseEmptyArray(t *testing.T) {
 func TestTlvParseSuccessCase(t *testing.T) {
 	//test cases
 	case1 := []byte("11AB398765UJ1A05")
-	result1 := map[string]string{"largo": "11", "valor": "AB398765UJ1", "tipo": "A05"}
+	result1 := map[string]string{"length": "11", "value": "AB398765UJ1", "type": "A05"}
 	case2 := []byte("0255N23")
-	result2 := map[string]string{"largo": "02", "valor": "55", "tipo": "N23"}
+	result2 := map[string]string{"length": "02", "value": "55", "type": "N23"}
 	testcases := [][]byte{case1, case2}
 	testresult := []map[string]string{result1, result2}
 	for i, testcase := range testcases {
@@ -36,14 +36,14 @@ func TestTlvParseSuccessCase(t *testing.T) {
 			t.Errorf("Unexpected Error for case %d: %v", i, err)
 		}
 		if m != nil {
-			if m["largo"] != testresult[i]["largo"] {
-				t.Errorf("Wrong length expected \"%s\", got: \"%s\"", testresult[i]["largo"], m["largo"])
+			if m["length"] != testresult[i]["length"] {
+				t.Errorf("Wrong length expected \"%s\", got: \"%s\"", testresult[i]["length"], m["length"])
 			}
-			if m["valor"] != testresult[i]["valor"] {
-				t.Errorf("Wrong value, expected \"%s\", got: %s", testresult[i]["valor"], m["valor"])
+			if m["value"] != testresult[i]["value"] {
+				t.Errorf("Wrong value, expected \"%s\", got: %s", testresult[i]["value"], m["value"])
 			}
-			if m["tipo"] != testresult[i]["tipo"] {
-				t.Errorf("Wrong type, expected \"%s\", got: %s", testresult[i]["tipo"], m["tipo"])
+			if m["type"] != testresult[i]["type"] {
+				t.Errorf("Wrong type, expected \"%s\", got: %s", testresult[i]["type"], m["type"])
 			}
 		}
 	}

@@ -49,9 +49,9 @@ func TlvParse(input []byte) (map[string]string, error) {
 	}
 	//build result
 	result := map[string]string{
-		"largo": largos,
-		"tipo":  tipos,
-		"valor": valors,
+		"length": largos,
+		"type":   tipos,
+		"value":  valors,
 	}
 	return result, nil
 }
