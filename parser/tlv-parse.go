@@ -5,10 +5,6 @@ import (
 	"strconv"
 )
 
-//EmptyArrayError Si la entrada esta vacia.
-type EmptyArrayError struct {
-}
-
 //InvalidTlvError Si algún campo no cumple con el tipo de dato especificado.
 type InvalidTlvError struct {
 }
@@ -18,7 +14,6 @@ type InvalidFieldSizeError struct {
 	field string
 }
 
-func (e *EmptyArrayError) Error() string       { return "Array is empty." }
 func (e *InvalidTlvError) Error() string       { return "Value does not match data type." }
 func (e *InvalidFieldSizeError) Error() string { return e.field + " incomplete." }
 
@@ -43,54 +38,34 @@ func TlvParse(input []byte) (map[string]string, error) {
 		return nil, &InvalidFieldSizeError{field: "Value or Type"}
 	}
 	//TLV value
-	valorb := input[j:k]
-	valors := string(valorb)
+	valors := string(input[j:k])
 	//TLV type
 	tipob := input[k : k+3]
 	tipos := string(tipob)
 	//validation
-	if !tlvValidate(tipob, valorb, largoi) {
+	validate := validation(tipob[0])
+	if !validate(valors) {
 		return nil, &InvalidTlvError{}
 	}
 	//build result
-	result := make(map[string]string)
-	result["largo"] = largos
-	result["tipo"] = tipos
-	result["valor"] = valors
+	result := map[string]string{
+		"largo": largos,
+		"tipo":  tipos,
+		"valor": valors,
+	}
 	return result, nil
 }
 
-func tlvValidate(tipo []byte, valor []byte, length int) bool {
-	valid := validation(tipo[0])
-	b := true
-	for i := 0; b && i < length; i++ {
-		b = valid(valor[i])
-	}
-	return b
-}
-
-type strategy func(byte) bool
+//type strategy func(byte) bool
+type strategy func(string) bool
 
 func validation(tipo byte) strategy {
 	switch tipo {
 	case 'A':
-		return alphanumericValidate
+		return regexp.MustCompile(`^[a-zA-Z0-9]*$`).MatchString
 	case 'N':
-		return numericValidate
+		return regexp.MustCompile(`^[0-9]*$`).MatchString
 	default:
-		return func(value byte) bool { return false }
+		return func(value string) bool { return false }
 	}
-}
-
-func alphanumericValidate(value byte) bool {
-	isStringAlphaNumeric := regexp.MustCompile(`^[a-zA-Z0-9]*$`).MatchString
-	return isStringAlphaNumeric(string(value))
-}
-
-func numericValidate(value byte) bool {
-	_, err := strconv.Atoi(string(value))
-	if err != nil {
-		return false
-	}
-	return true
 }
