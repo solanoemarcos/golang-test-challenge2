@@ -5,11 +5,11 @@ import (
 	"strconv"
 )
 
-//InvalidTlvError Si algún campo no cumple con el tipo de dato especificado.
+//InvalidTlvError If value field does not match the specified type
 type InvalidTlvError struct {
 }
 
-//InvalidFieldSizeError Si algún campo no cumple con el tamaño especificado.
+//InvalidFieldSizeError If any field does not match specified size
 type InvalidFieldSizeError struct {
 	field string
 }
@@ -17,7 +17,7 @@ type InvalidFieldSizeError struct {
 func (e *InvalidTlvError) Error() string       { return "Value does not match data type." }
 func (e *InvalidFieldSizeError) Error() string { return e.field + " incomplete." }
 
-//TlvParse ejecuta el parseo del arreglo de bytes
+//TlvParse parse the byte array
 func TlvParse(input []byte) (map[string]string, error) {
 	//range
 	length := len(input)
@@ -60,9 +60,9 @@ type strategy func(string) bool
 
 func validation(tipo byte) strategy {
 	switch tipo {
-	case 'A':
+	case 'A': //alphanumeric
 		return regexp.MustCompile(`^[a-zA-Z0-9]*$`).MatchString
-	case 'N':
+	case 'N': //numeric
 		return regexp.MustCompile(`^[0-9]*$`).MatchString
 	default:
 		return func(value string) bool { return false }

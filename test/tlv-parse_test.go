@@ -28,8 +28,10 @@ func TestTlvParseSuccessCase(t *testing.T) {
 	result1 := map[string]string{"length": "11", "value": "AB398765UJ1", "type": "A05"}
 	case2 := []byte("0255N23")
 	result2 := map[string]string{"length": "02", "value": "55", "type": "N23"}
-	testcases := [][]byte{case1, case2}
-	testresult := []map[string]string{result1, result2}
+	case3 := []byte("00N23")
+	result3 := map[string]string{"length": "00", "value": "", "type": "N23"}
+	testcases := [][]byte{case1, case2, case3}
+	testresult := []map[string]string{result1, result2, result3}
 	for i, testcase := range testcases {
 		m, err := parser.TlvParse(testcase)
 		if err != nil {
