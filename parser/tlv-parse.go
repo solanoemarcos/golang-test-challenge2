@@ -56,7 +56,6 @@ func TlvParse(input []byte) (map[string]string, error) {
 	return result, nil
 }
 
-//type strategy func(byte) bool
 type strategy func(string) bool
 
 func validation(tipo byte) strategy {
