@@ -27,31 +27,31 @@ func TlvParse(input []byte) (map[string]string, error) {
 	if length < j {
 		return nil, &InvalidFieldSizeError{field: "Length"}
 	}
-	largos := string(input[i:j])
-	largoi, err := strconv.Atoi(largos)
+	lengths := string(input[i:j])
+	lengthi, err := strconv.Atoi(lengths)
 	if err != nil {
 		return nil, err
 	}
 	//validate size
-	k := largoi + j
+	k := lengthi + j
 	if length < k+3 {
 		return nil, &InvalidFieldSizeError{field: "Value or Type"}
 	}
 	//TLV value
-	valors := string(input[j:k])
+	values := string(input[j:k])
 	//TLV type
-	tipob := input[k : k+3]
-	tipos := string(tipob)
+	typeb := input[k : k+3]
+	types := string(typeb)
 	//validation
-	validate := validation(tipob[0])
-	if !validate(valors) {
+	validate := validation(typeb[0])
+	if !validate(values) {
 		return nil, &InvalidTlvError{}
 	}
 	//build result
 	result := map[string]string{
-		"length": largos,
-		"type":   tipos,
-		"value":  valors,
+		"length": lengths,
+		"type":   types,
+		"value":  values,
 	}
 	return result, nil
 }
