@@ -1,7 +1,6 @@
 language: go
 
 go:
-  1.14.1
+  - 1.14.1
 
-script:
-  go test ./test -coverpkg ./...
+script: go test ./test -coverpkg ./...
